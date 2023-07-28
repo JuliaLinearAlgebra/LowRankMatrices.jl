@@ -40,9 +40,18 @@ end
 LowRankMatrix{T}(A::AbstractMatrix) where T = LowRankMatrix{T}(AbstractMatrix{T}(A))
 LowRankMatrix(A::AbstractMatrix{T}) where T = LowRankMatrix{T}(A)
 
+if !isdefined(Base, :require_one_based_indexing)
+    function require_one_based_indexing(A...)
+        !Base.has_offset_axes(A...) ||
+            throw(ArgumentError("offset arrays are not supported but got an array with index other than 1"))
+    end
+else
+    require_one_based_indexing(A...) = Base.require_one_based_indexing(A...)
+end
+
 # Moves Σ into U and V
 function refactorsvd!(U::AbstractMatrix{S}, Σ::AbstractVector{T}, V::AbstractMatrix{S}) where {S,T}
-	Base.require_one_based_indexing(U, Σ, V)
+	require_one_based_indexing(U, Σ, V)
     conj!(V)
     σmax = Σ[1]
     r = count(s->s>10σmax*eps(T),Σ)
