@@ -3,7 +3,9 @@ using Test
 using LinearAlgebra
 using FillArrays
 
-include("aqua.jl")
+if VERSION >= v"1.10"
+    include("aqua.jl")
+end
 
 @testset "Constructors" begin
     @test Matrix(LowRankMatrix(Zeros(10,5))) == zeros(10,5)
