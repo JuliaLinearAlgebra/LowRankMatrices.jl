@@ -49,6 +49,18 @@ end
 
 end
 
+@testset "convert" begin
+    L = LowRankMatrix([1,2], [1,2])
+    Lf = convert(LowRankMatrix{Float64}, L)
+    @test Lf == L
+    @test Lf isa LowRankMatrix{Float64}
+    Lf = convert(AbstractMatrix{Float64}, L)
+    @test Lf == L
+    @test Lf isa AbstractMatrix{Float64}
+    Lf = convert(AbstractArray{Float64}, L)
+    @test Lf == L
+    @test Lf isa AbstractArray{Float64}
+end
 
 @testset "LowRankMatrix algebra" begin
     A = LowRankMatrices._LowRankMatrix(randn(20,4), randn(12,4))
