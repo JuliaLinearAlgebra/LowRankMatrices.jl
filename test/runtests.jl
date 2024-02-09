@@ -3,6 +3,8 @@ using Test
 using LinearAlgebra
 using FillArrays
 
+include("aqua.jl")
+
 @testset "Constructors" begin
     @test Matrix(LowRankMatrix(Zeros(10,5))) == zeros(10,5)
 
