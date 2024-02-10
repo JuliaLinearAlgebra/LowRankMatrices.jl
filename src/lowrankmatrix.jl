@@ -68,10 +68,11 @@ function refactorsvd!(U::AbstractMatrix{S}, Σ::AbstractVector{T}, V::AbstractMa
     r
 end
 
-for MAT in (:LowRankMatrix, :AbstractMatrix, :AbstractArray)
-    @eval convert(::Type{$MAT{T}}, L::LowRankMatrix) where {T} =
-        LowRankMatrix(convert(Matrix{T}, L.U), convert(Matrix{T}, L.V))
+function convert(::Type{LowRankMatrix{T}}, L::LowRankMatrix) where {T}
+    L isa LowRankMatrix{T} && return L
+    LowRankMatrix(convert(Matrix{T}, L.U), convert(Matrix{T}, L.V))
 end
+
 convert(::Type{Matrix{T}}, L::LowRankMatrix) where {T} = convert(Matrix{T}, Matrix(L))
 promote_rule(::Type{LowRankMatrix{T}}, ::Type{LowRankMatrix{V}}) where {T,V} = LowRankMatrix{promote_type(T,V)}
 promote_rule(::Type{LowRankMatrix{T}}, ::Type{Matrix{V}}) where {T,V} = Matrix{promote_type(T,V)}
