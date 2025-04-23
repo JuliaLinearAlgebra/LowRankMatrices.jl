@@ -1,6 +1,7 @@
 module LowRankMatricesFillArraysExt
 
 using LowRankMatrices
+import LowRankMatrices: LowRankMatrix
 using FillArrays
 using FillArrays: AbstractFill
 
