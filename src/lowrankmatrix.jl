@@ -126,8 +126,6 @@ for op in (:+,:-)
             size(L) == size(M) || throw(DimensionMismatch("A has dimensions $(size(L)) but B has dimensions $(size(M))"))
             LowRankMatrix(hcat(L.U,$op(M.U)), hcat(L.V,M.V))
         end
-        $op(L::LowRankMatrix,A::Matrix) = $op(promote(L,A)...)
-        $op(A::Matrix,L::LowRankMatrix) = $op(promote(A,L)...)
     end
 end
 
