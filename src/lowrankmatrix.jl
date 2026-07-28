@@ -144,7 +144,18 @@ function mul!(b::AbstractVector, L::LowRankMatrix, x::AbstractVector)
     mul!(b, L.U, temp)
     b
 end
+
 function *(L::LowRankMatrix, M::LowRankMatrix)
+    lowrankmul(L,M)
+end
+function *(L::LowRankMatrix, A::Matrix)
+    lowrankmul(L,A)
+end
+function *(A::Matrix, L::LowRankMatrix)
+    lowrankmul(A,L)
+end
+
+function lowrankmul(L::LowRankMatrix, M::LowRankMatrix)
     T = promote_type(eltype(L),eltype(M))
     temp = zeros(T,rank(L),rank(M))
     mul!(temp, transpose(L.V), M.U)
@@ -153,17 +164,13 @@ function *(L::LowRankMatrix, M::LowRankMatrix)
     LowRankMatrix(copy(L.U),V)
 end
 
-
-
-function *(L::LowRankMatrix, A::Matrix)
+function lowrankmul(L::LowRankMatrix, A::AbstractMatrix)
     V = zeros(promote_type(eltype(L),eltype(A)),size(A,2),rank(L))
     mul!(V, transpose(A), L.V)
     LowRankMatrix(copy(L.U),V)
 end
 
-
-
-function *(A::Matrix, L::LowRankMatrix)
+function lowrankmul(A::AbstractMatrix, L::LowRankMatrix)
     U = zeros(promote_type(eltype(A),eltype(L)),size(A,1),rank(L))
     mul!(U,A,L.U)
     LowRankMatrix(U,copy(L.V))

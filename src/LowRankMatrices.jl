@@ -13,6 +13,7 @@ include("lowrankmatrix.jl")
 
 if !isdefined(Base, :get_extension)
     include("../ext/LowRankMatricesFillArraysExt.jl")
+    include("../ext/LowRankMatricesSparseArraysExt.jl")
 end
 
 end
