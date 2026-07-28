@@ -2,6 +2,7 @@ using LowRankMatrices
 using Test
 using LinearAlgebra
 using FillArrays
+using SparseArrays
 
 if VERSION >= v"1.10"
     include("aqua.jl")
@@ -101,3 +102,11 @@ end
     @test A*v ≈ Matrix(A)*v
 end
 
+@testset "SparseMatrixCSC * LowRankMatrix" begin
+    A = LowRankMatrices._LowRankMatrix(randn(20,4), randn(12,4))
+    S = sparse(randn(12,20))
+    @test A*S isa LowRankMatrix
+    @test S*A isa LowRankMatrix
+    @test A*S ≈ Matrix(A)*Matrix(S)
+    @test S*A ≈ Matrix(S)*Matrix(A)
+end
