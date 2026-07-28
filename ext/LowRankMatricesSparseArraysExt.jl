@@ -1,19 +1,13 @@
 module LowRankMatricesSparseArraysExt
 
-using LowRankMatrices: LowRankMatrix
+using LowRankMatrices: LowRankMatrix, lowrankmul
 using SparseArrays: SparseMatrixCSC
-using LinearAlgebra: rank, mul!
 
 function Base.:*(L::LowRankMatrix, A::SparseMatrixCSC)
-    V = zeros(promote_type(eltype(L), eltype(A)), size(A, 2), rank(L))
-    mul!(V, transpose(A), L.V)
-    LowRankMatrix(copy(L.U), V)
+    lowrankmul(L,A)
 end
-
 function Base.:*(A::SparseMatrixCSC, L::LowRankMatrix)
-    U = zeros(promote_type(eltype(A), eltype(L)), size(A, 1), rank(L))
-    mul!(U, A, L.U)
-    LowRankMatrix(U, copy(L.V))
+    lowrankmul(A,L)
 end
 
 end
